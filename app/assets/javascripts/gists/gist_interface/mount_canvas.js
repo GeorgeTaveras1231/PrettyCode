@@ -7,12 +7,12 @@ PC.onLoadEvent(function(){
   // any environment information --------------------------------------|
   PC.canvas.registerTool('crop', {
     begin: function( e ){},
-    move: function( e ){
+    move: function( e, c ){
       var
-        canvas    = e.canvas.mainObject,
-        context   = e.canvas.context,
-        currentX  = e.canvas.x,
-        currentY  = e.canvas.y;
+        canvas    = c.mainObject,
+        context   = c.context,
+        currentX  = c.x,
+        currentY  = c.y;
 
       canvas.cursor( 'crosshair' );
       canvas.render();
@@ -23,11 +23,11 @@ PC.onLoadEvent(function(){
       context.strokeStyle = Canvas.helpers.hexToRGB( '#666' , 1 );
       context.strokeRect( 0, 0, currentX, currentY );
     },
-    end: function( e ){
+    end: function( e, c ){
       var
-        canvas    = e.canvas.mainObject,
-        currentX  = e.canvas.x,
-        currentY  = e.canvas.y,
+        canvas    = c.mainObject,
+        currentX  = c.x,
+        currentY  = c.y,
         url,
         data;
 

@@ -1,40 +1,29 @@
-$( document ).on('page:change', function() {
+// create custom drag even
+$( document ).on( 'mousedown mouseup mousemove', '*', function( e ){
+  var 
+    $this     = $( this ),
+    offset    = $this.offset(),
+    eventData = {
+      // e.offset_ for Chrome
+      // Mozilla only supports e.client_
+      offsetX: e.offsetX || e.clientX - offset.left,
+      offsetY: e.offsetY || e.clientY - offset.top
+    };
 
-  // drag event
-  $( '*' ).on('mousedown mouseup mousemove', function( e ){
-    var 
-      $this = $( this ),
-      eventData = {};
+  if( e.type === 'mousedown'){
+    eventData.type = 'drag:begin';
+    $this.data( 'mousedown', true );
 
+  }else if( e.type === 'mouseup' ){
+    eventData.type = 'drag:end';
+    $this.data('mousedown', false);
 
-    _.extend( eventData, {
-      offsetX: e.offsetX || e.clientX - $this.offset().left,
-      offsetY: e.offsetY || e.clientY - $this.offset().top
-    });
+  }else if( e.type === 'mousemove' && $this.data('mousedown') ){
+    eventData.type = 'drag:move';
+  }
 
-    if( e.type === 'mousedown'){
-      $this.data('mousedown', true);
-      _.extend( eventData, { type: 'drag:begin' } );
-      
-      $this.trigger( eventData );
-
-      return;
-    }else if( e.type === 'mouseup' ){
-      _.extend( eventData, { type: 'drag:end' } );
-      
-      $this.trigger( eventData );
-      $this.data('mousedown', false);
-
-      return;
-    }
-
-    if( e.type === 'mousemove' && $this.data('mousedown') ){
-
-      _.extend( eventData, { type: 'drag:move' } );
-      
-      $this.trigger( eventData );
-    }
-
-  });
+  if( eventData.type ){
+    $this.trigger( eventData );
+  }
 
 });

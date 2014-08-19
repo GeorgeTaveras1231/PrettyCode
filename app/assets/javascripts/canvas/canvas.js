@@ -42,23 +42,6 @@ function Canvas( selector ) {
   this.$canvas[ 0 ].height = 2000;
 
 
-  // default event behaviors
-  var
-    DEFAULT_BEHAVIORS;
-
-  DEFAULT_BEHAVIORS = {
-    begin: function( data ){
-      // placeholder
-    },
-    move: function( data ){
-      //placeholder
-    },
-    end: function( data ){
-      _this.cacheLayer();
-      _this.cacheCanvas();
-      _this.clearCache();
-    }
-  };
 
   // cache this(the abstract object) before changing context;
   var 
@@ -70,7 +53,6 @@ function Canvas( selector ) {
     var
       x,
       y,
-      // this is the canvas element
       $this,
       eventType;
 
@@ -80,9 +62,8 @@ function Canvas( selector ) {
     $this     = $( this );
     x         = e.offsetX;
     y         = e.offsetY;
-    eventData = { 
-                  type: eventType,
-                  canvas: {
+    eventData = { type: eventType };
+    canvas    = {
                     x              : x,
                     y              : y,
                     context        : _this.context,
@@ -92,13 +73,11 @@ function Canvas( selector ) {
                     color          : _this.currentColor,
                     brushSize      : _this.brushSize,
                     opacity        : _this.currentOpacity,
-                    defaultBehavior: DEFAULT_BEHAVIORS[ e.type.split(':')[1] ],
-                    tool           : _this.tools[ _this.currentTool ]
-                  }
-                };
+                    tool           : _this.currentTool
+                  };
 
     $this.css({ cursor: _this.currentCursor });
-    $this.trigger( eventData );
+    $this.trigger( eventData, canvas );
 
   });
 
@@ -141,8 +120,7 @@ Canvas.prototype.cacheLayer  = function(){
   };
 
 Canvas.prototype.cacheCanvas = function(){
-  var 
-    stateLayer;
+  var stateLayer;
   if( this.canvasCacheEnabled ){
     stateLayer = new Layer( this.$canvas[ 0 ].toDataURL() );
     this.stateStack.unshift( stateLayer );
@@ -150,7 +128,7 @@ Canvas.prototype.cacheCanvas = function(){
 };
 
 
-Canvas.prototype.clearCache    = function(){
+Canvas.prototype.clearCache = function(){
   this.cachingContext.clearRect( 0, 0, this.cachingCanvas[ 0 ].width, this.cachingCanvas[ 0 ].height );
 };
 
@@ -166,6 +144,7 @@ Canvas.prototype.assign = function( attrName, val ){
     this.cachingContext[ attrName ] = val;
   }
 };
+
 Canvas.prototype.render = function(){
   this.clearCache();
   this.clear();
@@ -261,22 +240,19 @@ Canvas.prototype.changeCanvasSize = function( sizes ){
 };
 
 Canvas.prototype.scrollCanvasY = function( pos ){
-  this.$canvas.trigger({
-    type: 'scrollY'
-  }, pos );
+  this.$canvas.trigger({ type: 'scrollY' }, pos );
 
   this.$canvasWrapper.scrollTop( pos );
 };
 
 Canvas.prototype.scrollCanvasX = function( pos ){
-  this.$canvas.trigger({
-    type: 'scrollX'
-  }, pos );
+  this.$canvas.trigger({ type: 'scrollX' }, pos );
+
   this.$canvasWrapper.scrollLeft( pos );
 };
 
 Canvas.prototype.toDataURLcrop = function( obj ){
-  var $tempCanvas = $('<canvas></canvas>'),
+  var $tempCanvas = $( '<canvas>' ),
       tempContext = $tempCanvas[ 0 ].getContext( '2d' ),
       tempImage   = new Image(),
       x           = obj.x || 0;

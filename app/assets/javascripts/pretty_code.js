@@ -85,6 +85,7 @@ window.PC = {
       throw new Error('Canvas or Editor aren\'t mounted');
 
     if( mode === 'canvas' ){
+      // bring canvas forward
       PC.$.editor
         .css({ opacity: 1 })
         .removeClass( frontClass )
@@ -93,6 +94,7 @@ window.PC = {
         .removeClass( backClass )
         .addClass( frontClass );
     }else if( mode === 'editor'){
+      // bring editor forward
       PC.$.editor
         .css({ opacity: 0.8 })
         .removeClass( backClass )
