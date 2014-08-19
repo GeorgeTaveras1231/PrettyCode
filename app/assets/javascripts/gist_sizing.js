@@ -1,4 +1,4 @@
-PC.onLoadEvent(function(){
+PC.onLoadEvent(function() {
   // adjust the size of gists when
   // document is ready
   PC.adjustGistSize( '.gist', {

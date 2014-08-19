@@ -49,7 +49,7 @@ function Canvas( selector ) {
     canvasStateData = {},
     toolStateData   = {};
 
-  this.$canvas.on( 'drag:begin drag:move drag:end', function( e ){
+  this.$canvas.on( 'drag:begin drag:move drag:end', function( e ) {
     var
       x,
       y,
@@ -58,6 +58,9 @@ function Canvas( selector ) {
 
     toolStateData[ _this.currentTool ] = toolStateData[ _this.currentTool ] || {};
 
+
+    // allow event hook for each tool
+    // ei: drag:begin:pencil
     eventType = e.type + ':' + _this.currentTool;
     $this     = $( this );
     x         = e.offsetX;
@@ -102,14 +105,14 @@ function Canvas( selector ) {
 
 }
 
-Canvas.registerTool = function( name, map ){
+Canvas.registerTool = function( name, map ) {
   Canvas.initialTools = Canvas.initialTools || {};
 
   Canvas.initialTools[ name ] = map;
 };
 
 
-Canvas.prototype.cacheLayer  = function(){
+Canvas.prototype.cacheLayer  = function() {
     var 
       shapeLayer;
     if( this.layerCacheEnabled ){
@@ -119,7 +122,7 @@ Canvas.prototype.cacheLayer  = function(){
     }
   };
 
-Canvas.prototype.cacheCanvas = function(){
+Canvas.prototype.cacheCanvas = function() {
   var stateLayer;
   if( this.canvasCacheEnabled ){
     stateLayer = new Layer( this.$canvas[ 0 ].toDataURL() );
@@ -128,24 +131,24 @@ Canvas.prototype.cacheCanvas = function(){
 };
 
 
-Canvas.prototype.clearCache = function(){
+Canvas.prototype.clearCache = function() {
   this.cachingContext.clearRect( 0, 0, this.cachingCanvas[ 0 ].width, this.cachingCanvas[ 0 ].height );
 };
 
-Canvas.prototype.exec = function( funcName, args ){
+Canvas.prototype.exec = function( funcName, args ) {
   this.context[ funcName ].apply( this.context, args );
   if( this.layerCacheEnabled ){
     this.cachingContext[ funcName ].apply( this.cachingContext, args );
   }
 };
-Canvas.prototype.assign = function( attrName, val ){
+Canvas.prototype.assign = function( attrName, val ) {
   this.context[ attrName ] = val;
   if( this.layerCacheEnabled ){
     this.cachingContext[ attrName ] = val;
   }
 };
 
-Canvas.prototype.render = function(){
+Canvas.prototype.render = function() {
   this.clearCache();
   this.clear();
   if( this.stateStack[ 0 ] ){
@@ -154,7 +157,7 @@ Canvas.prototype.render = function(){
 
 };
 
-Canvas.prototype.registerTool = function( name, map ){
+Canvas.prototype.registerTool = function( name, map ) {
   var 
     type, 
     callback;
@@ -168,37 +171,37 @@ Canvas.prototype.registerTool = function( name, map ){
   }
 };
 
-Canvas.prototype.drawImage = function(){
+Canvas.prototype.drawImage = function() {
   this.context.drawImage.apply( this.context, arguments );
 };
 
 
-Canvas.prototype.use = function( toolName ){
+Canvas.prototype.use = function( toolName ) {
   this.toolHistory.unshift( toolName );
   this.currentTool = toolName;
 };
 
-Canvas.prototype.changeColor = function( color ){
+Canvas.prototype.changeColor = function( color ) {
   this.currentColor = color;
 };
 
-Canvas.prototype.changeSize = function( size ){
+Canvas.prototype.changeSize = function( size ) {
   this.brushSize = size;
 };
 
-Canvas.prototype.changeOpacity = function( opacity ){
+Canvas.prototype.changeOpacity = function( opacity ) {
   this.currentOpacity = opacity;
 };
 
-Canvas.prototype.height = function(){
+Canvas.prototype.height = function() {
   return this.$canvas.height();
 };
 
-Canvas.prototype.width = function(){
+Canvas.prototype.width = function() {
   return this.$canvas.width();
 };
 
-Canvas.prototype.cursor = function( name, hard ){
+Canvas.prototype.cursor = function( name, hard ) {
   if( hard ){
     this.currentCursor = name;
   }else {
@@ -206,7 +209,7 @@ Canvas.prototype.cursor = function( name, hard ){
   }
 };
 
-Canvas.prototype.undo = function( steps ){
+Canvas.prototype.undo = function( steps ) {
   steps = steps || 1;
   this.stateStack.splice( 0, steps );
   this.layerStack.forEach(function( layer ){
@@ -215,13 +218,13 @@ Canvas.prototype.undo = function( steps ){
   this.render();
 };
 
-Canvas.prototype.select = function( layer_id ){
-  this.currentLayer = this.layerStack.filter(function( layer ){
+Canvas.prototype.select = function( layer_id ) {
+  this.currentLayer = this.layerStack.filter(function( layer ) {
     return layer.id === layer_id;
   })[ 0 ];
 };
 
-Canvas.prototype.clear = function( x, y, width, height ){
+Canvas.prototype.clear = function( x, y, width, height ) {
   x      = x || 0;
   y      = y || 0;
   width  = width  || this.width();
@@ -230,7 +233,7 @@ Canvas.prototype.clear = function( x, y, width, height ){
   return this.context.clearRect( x, y, width, height );
 };
 
-Canvas.prototype.changeCanvasSize = function( sizes ){
+Canvas.prototype.changeCanvasSize = function( sizes ) {
   var
     height = sizes.height || this.$canvasWrapper.height(),
     width  = sizes.width || this.$canvasWrapper.width();
@@ -239,19 +242,19 @@ Canvas.prototype.changeCanvasSize = function( sizes ){
   this.$canvasWrapper.css({ height: height, width: width });
 };
 
-Canvas.prototype.scrollCanvasY = function( pos ){
+Canvas.prototype.scrollCanvasY = function( pos ) {
   this.$canvas.trigger({ type: 'scrollY' }, pos );
 
   this.$canvasWrapper.scrollTop( pos );
 };
 
-Canvas.prototype.scrollCanvasX = function( pos ){
+Canvas.prototype.scrollCanvasX = function( pos ) {
   this.$canvas.trigger({ type: 'scrollX' }, pos );
 
   this.$canvasWrapper.scrollLeft( pos );
 };
 
-Canvas.prototype.toDataURLcrop = function( obj ){
+Canvas.prototype.toDataURLcrop = function( obj ) {
   var $tempCanvas = $( '<canvas>' ),
       tempContext = $tempCanvas[ 0 ].getContext( '2d' ),
       tempImage   = new Image(),

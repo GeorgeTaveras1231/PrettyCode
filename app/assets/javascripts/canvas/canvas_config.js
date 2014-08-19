@@ -37,7 +37,7 @@ Canvas.registerTool( 'pencil', {
 
 
 Canvas.registerTool( 'eraser', {
-  begin: function( e, c ){
+  begin: function( e, c ) {
     var canvas = e.canvas.mainObject;
 
     c.toolStateData.prevComp = c.context.globalCompositeOperation;

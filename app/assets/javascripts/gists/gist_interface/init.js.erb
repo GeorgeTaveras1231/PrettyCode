@@ -1,9 +1,9 @@
-PC.onLoadEvent(function(){
+PC.onLoadEvent(function() {
 
   // list of supported languages all live in GistsHelper ---------------|
-  <% environment.context_class.instance_eval { include GistsHelper } %>
+  <% environment.context_class.send :include, GistsHelper %>
   //--------------------------------------------------------------------|
-  PC.supportedLanguages = JSON.parse('<%= supported_languages.to_json %>');
+  PC.supportedLanguages = JSON.parse( '<%= supported_languages.to_json %>' );
 
   PC.canvas = new Canvas( '#main-canvas' );
   PC.editor = ace.edit( 'editor' );
@@ -30,7 +30,6 @@ PC.onLoadEvent(function(){
   this.cropPanelButton   = this.cropModalFooter.find( this.cropPanel.data( 'related' ) );
   this.previewPanel      = this.cropModal.find( '#preview-panel' );
   this.prevPanelButton   = this.cropModalFooter.find( this.previewPanel.data( 'related' ) );
-
 
   this.tools             = this.body.find( '#canvas-tools' );
   this.toolButtons       = this.tools.find( 'input:radio[name="tool"]' );

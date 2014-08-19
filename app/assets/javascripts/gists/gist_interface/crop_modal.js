@@ -1,9 +1,14 @@
-PC.onLoadEvent(function(){
+PC.onLoadEvent(function() {
+  var toggleButtonCallback = PC.collapse.toggleRelatedButton( 'btn-primary disabled', 'btn-default' );
+
+  // toggle the button related to the open panel
+  this.cropPanel.on( 'show.bs.collapse hide.bs.collapse', toggleButtonCallback);
+  this.previewPanel.on( 'show.bs.collapse hide.bs.collapse', toggleButtonCallback);
 
   this.gistContent.hide();
+
   // user must choose canvas size before submitting
-  // --------------------------------------------------|  
-  this.gistForm.on('submit', function( e ){
+  this.gistForm.on( 'submit', function( e ) {
     
     if( !e.readyToSubmit ){
       e.preventDefault();
@@ -20,12 +25,10 @@ PC.onLoadEvent(function(){
 
       PC.$.cropModal.modal();
 
-      //--------------------------|
     }
   });
-  //---------------------------------------------------|
 
-  this.cropModal.on( 'hide.bs.modal', function( e ){
+  this.cropModal.on( 'hide.bs.modal', function( e ) {
     PC.$.canvasWrapper.removeClass( 'modal-crop-state' );
     PC.$.originalWrapperDestination.prepend( PC.$.canvasWrapper );
 
@@ -38,14 +41,9 @@ PC.onLoadEvent(function(){
     trigger: 'click hover'
   });
 
-  this.cropPanel.on( 'show.bs.collapse hide.bs.collapse', 
-    PC.collapse.toggleRelatedButton( 'btn-primary disabled', 'btn-default' ));
-
-  this.previewPanel.on( 'show.bs.collapse hide.bs.collapse', 
-    PC.collapse.toggleRelatedButton( 'btn-primary disabled', 'btn-default' ));
-
-  this.gistVisualURL.on( 'change', function( e ){
+  this.gistVisualURL.on( 'change', function( e ) {
     // enable submit button
+    // when the canvas url is ready to submit
     PC.$.cropModalSubmit
       .removeClass( 'btn-default disabled custom-disabled' )
       .addClass( 'btn-success' );
@@ -54,9 +52,13 @@ PC.onLoadEvent(function(){
     PC.$.prevPanelButton.removeClass( 'custom-disabled' );
   });
 
-  this.cropModalSubmit.on( 'click', function( e ){
+  this.cropModalSubmit.on( 'click', function( e ) {
     e.stopPropagation();
-    PC.$.gistForm.val( PC.$.previewPanel.find( '#preview-name' ).val() );
+
+    var newName = PC.$.previewPanel.find( '#preview-name' ).val();
+    // update the name of the gist to the one submitted at the preview panel
+    PC.$.gistName.val( newName );
+
     PC.$.gistForm.trigger({
       type: 'submit',
       readyToSubmit: true

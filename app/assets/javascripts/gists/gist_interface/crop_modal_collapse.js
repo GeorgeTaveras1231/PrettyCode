@@ -1,24 +1,24 @@
-PC.onLoadEvent(function(){
+PC.onLoadEvent(function() {
 
   PC.collapse = {
     config: {
       parent: '.modal-body',
       toggle: true
     },
-    collapseAll: function( collection ){
-      collection.forEach(function( collapsable ){
+    collapseAll: function( collection ) {
+      collection.forEach(function( collapsable ) {
         collapsable.collapse( 'hide' );
       });
     },
-    toggleRelatedButton: function( showClass, hideClass ){
+    toggleRelatedButton: function( showClass, hideClass ) {
 
-      return function( e ){
+      return function( e ) {
         var $this = $( this );
 
         if( e.type === 'show' ){
           PC.$.cropModalTitle.html( $this.data( 'title' ) );
 
-          PC.collapse.collapseAll( [ PC.$.cropPanel, PC.$.previewPanel ] );
+          PC.collapse.collapseAll([ PC.$.cropPanel, PC.$.previewPanel ]);
 
           PC.$.cropModalFooter.find( $this.data( 'related' ) )
             .removeClass( hideClass )
@@ -33,6 +33,6 @@ PC.onLoadEvent(function(){
     }
   };
 
-  PC.$.cropPanel   .collapse( PC.collapse.config );
+  PC.$.cropPanel.collapse( PC.collapse.config );
   PC.$.previewPanel.collapse( PC.collapse.config );
 });

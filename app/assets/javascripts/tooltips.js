@@ -1,4 +1,4 @@
-PC.onLoadEvent(function(){
+PC.onLoadEvent(function() {
   // enable tooltips
   this.tooltips.tooltip();
 });

@@ -14,7 +14,7 @@ window.PC = {
   editMode: 'editor',
   // to fully controll the order in which 'onload' code is executed
   // they are saved in an ordered stack of callbacks
-  onLoadEvent: (function(){
+  onLoadEvent: (function() {
     var 
       callbacks = [],
       index,
@@ -22,17 +22,17 @@ window.PC = {
       currentCallback,
       attachedEvent = false;
 
-    return function( callbackOrEventData ){
+    return function( callbackOrEventData ) {
       // if given a function, add to callback stack
       // else execute callbacks when onload event is triggered
       // in the context of the PC.$ caching object
-      if( typeof callbackOrEventData === 'function' ){
+      if( typeof callbackOrEventData === 'function' ) {
         callbacks.push( callbackOrEventData );
-      }else if( !attachedEvent ){
+      }else if( !attachedEvent ) {
 
-          PC.$.doc.on( PC.pageLoadEvent, function( e ){
+          PC.$.doc.on( PC.pageLoadEvent, function( e ) {
             length = callbacks.length;
-            for( index = 0; index < length; index += 1 ){
+            for( index = 0; index < length; index += 1 ) {
               currentCallback = callbacks[ index ];
               currentCallback.call( PC.$, e, callbackOrEventData );
             }
@@ -55,7 +55,7 @@ window.PC = {
       $code;
 
 
-    $.each( $gists, function(){
+    $.each( $gists, function() {
       var $this  = $( this );
 
       $image     = $this.find( additionalSelectors.image );
@@ -63,26 +63,26 @@ window.PC = {
       $gistBody  = $this.find( additionalSelectors.body );
       $code      = $this.find( additionalSelectors.code );
 
-      byHeight = _.sortBy( [ $image, $code ], function( el ){
+      byHeight = _.sortBy( [ $image, $code ], function( el ) {
         return el.height();
       });
 
       tallest  = byHeight[ 1 ];
       shortest = byHeight[ 0 ];
 
-      _.each( [ shortest, $gistBody, $lineCount ], function( el ){
+      _.each( [ shortest, $gistBody, $lineCount ], function( el ) {
         el.height( tallest.height() );
       });
     });
 
   },
-  changeEditMode: function( mode ){
+  changeEditMode: function( mode ) {
     var 
       backClass  = 'back',
       frontClass = 'front';
 
     if( !PC.$.editor || !PC.$.canvas )
-      throw new Error('Canvas or Editor aren\'t mounted');
+      throw new Error( 'Canvas or Editor aren\'t mounted' );
 
     if( mode === 'canvas' ){
       // bring canvas forward
@@ -93,7 +93,7 @@ window.PC = {
       PC.$.canvas
         .removeClass( backClass )
         .addClass( frontClass );
-    }else if( mode === 'editor'){
+    }else if( mode === 'editor' ) {
       // bring editor forward
       PC.$.editor
         .css({ opacity: 0.8 })

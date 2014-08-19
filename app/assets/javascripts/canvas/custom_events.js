@@ -1,5 +1,5 @@
 // create custom drag even
-$( document ).on( 'mousedown mouseup mousemove', '*', function( e ){
+$( document ).on( 'mousedown mouseup mousemove', '*', function( e ) {
   var 
     $this     = $( this ),
     offset    = $this.offset(),
@@ -10,7 +10,7 @@ $( document ).on( 'mousedown mouseup mousemove', '*', function( e ){
       offsetY: e.offsetY || e.clientY - offset.top
     };
 
-  if( e.type === 'mousedown'){
+  if( e.type === 'mousedown') {
     eventData.type = 'drag:begin';
     $this.data( 'mousedown', true );
 
@@ -18,7 +18,7 @@ $( document ).on( 'mousedown mouseup mousemove', '*', function( e ){
     eventData.type = 'drag:end';
     $this.data('mousedown', false);
 
-  }else if( e.type === 'mousemove' && $this.data('mousedown') ){
+  }else if( e.type === 'mousemove' && $this.data('mousedown') ) {
     eventData.type = 'drag:move';
   }
 

@@ -1,4 +1,4 @@
-PC.onLoadEvent(function(){
+PC.onLoadEvent(function() {
   // to avoid hitting the dom as much as possible,
   // here we cache all meaningful html elements for future use
   // in our app.
